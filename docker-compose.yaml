@@ -1,26 +1,49 @@
 services:
-  router1:
+  mobile_router:
     build:
-      dockerfile: netshoot-router
+      dockerfile: netshoot-mobile-router
     privileged: true
     cap_add:
       - NET_ADMIN
     networks:
-      general-link:
+      general-link-mobile:
       tunnel-2210:
         ipv6_address: 2001:200:0:1cdc:1e60::2210:3
       tunnel-2220:
         ipv6_address: 2001:200:0:1cdc:1e60::2220:3
-  
-  ping-container-general:
+
+  central_router:
+    build:
+      dockerfile: netshoot-central-router
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      general-link-central:
+      tunnel-2310:
+        ipv6_address: 2001:200:0:1cdc:1e60::2310:3
+
+  ping-container-general-mobile:
     build:
       dockerfile: netshoot-clients
     privileged: true
     cap_add:
       - NET_ADMIN
     networks:
-      general-link:
+      general-link-mobile:
         ipv6_address: 2001:200:0:1cdc:1e60::2110:3
+
+
+  ping-container-general-central:
+    build:
+      dockerfile: netshoot-clients
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      general-link-central:
+        ipv6_address: 2001:200:0:1cdc:1e60::2120:3
+
 
   ping-container-tunnel-2210:
     build:
@@ -43,9 +66,19 @@ services:
       tunnel-2220:
         ipv6_address: 2001:200:0:1cdc:1e60::2220:2
 
+  ping-container-tunnel-2310:
+    build:
+      dockerfile: netshoot-clients
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      tunnel-2310:
+        ipv6_address: 2001:200:0:1cdc:1e60::2310:2
+
 
 networks:
-  general-link:
+  general-link-mobile:
     enable_ipv6: true
     ipam:
       driver: default
@@ -53,6 +86,15 @@ networks:
         - subnet: 2001:200:0:1cdc:1e60::2110:0/112
           ip_range: 2001:200:0:1cdc:1e60::2110:0/112
           gateway: 2001:200:0:1cdc:1e60::2110:1
+    
+  general-link-central:
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:200:0:1cdc:1e60::2120:0/112
+          ip_range: 2001:200:0:1cdc:1e60::2120:0/112
+          gateway: 2001:200:0:1cdc:1e60::2120:1
     
   tunnel-2210:
     enable_ipv6: true
@@ -71,3 +113,12 @@ networks:
         - subnet: 2001:200:0:1cdc:1e60::2220:0/112
           ip_range: 2001:200:0:1cdc:1e60::2220:0/112
           gateway: 2001:200:0:1cdc:1e60::2220:1
+
+  tunnel-2310:
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 2001:200:0:1cdc:1e60::2310:0/112
+          ip_range: 2001:200:0:1cdc:1e60::2310:0/112
+          gateway: 2001:200:0:1cdc:1e60::2310:1

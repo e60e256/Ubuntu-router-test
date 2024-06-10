@@ -1,5 +1,14 @@
+# Enable IPv6
+sysctl -w net.ipv6.conf.all.disable_ipv6=0
+sysctl -w net.ipv6.conf.all.forwarding=1
+
 # Create a network namespace
 ip netns add NS
+
+ip netns exec NS sysctl -w net.ipv6.conf.all.disable_ipv6=0
+
+ip netns exec NS sysctl -w net.ipv6.conf.all.forwarding=1
+
 
 # Create a bridge
 ip netns exec NS ip link add name br0 type bridge
@@ -12,7 +21,7 @@ ip link set NS-veth1 netns NS
 ip netns exec NS ip link set NS-veth1 master br0
 
 # Assign IP addresses to the veth0 interfaces
-ip addr add 2001:200:0:1cdc:1e60::2110:1/96 dev veth0
+ip -6 addr add 2001:200:0:1cdc:1e60::2110:2/112 dev veth0
 
 # Eth0 to NS
 ip link set eth0 netns NS
@@ -25,5 +34,3 @@ ip netns exec NS ip link set br0 up
 ip netns exec NS ip link set NS-veth1 up
 ip link set veth0 up
 
-sysctl -w net.ipv6.conf.all.forwarding=1
-ip netns exec NS sysctl -w net.ipv6.conf.all.forwarding=1

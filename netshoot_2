@@ -1,5 +1,0 @@
-FROM netshoot:e60e256
-
-WORKDIR /app
-COPY ./network_config_router.sh /app/network_config.sh
-RUN chmod +x /app/network_config.sh

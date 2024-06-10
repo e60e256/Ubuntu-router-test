@@ -1,0 +1,5 @@
+FROM netshoot:e60e256
+WORKDIR /app
+COPY ./nwcfg/network_config_router.sh /app/network_config.sh
+RUN chmod +x /app/network_config.sh
+CMD /bin/sh -c "chmod +x /app/network_config.sh; /app/network_config.sh; while true; do sleep 10000; done"

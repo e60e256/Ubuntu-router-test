@@ -23,6 +23,21 @@ services:
       tunnel-2310:
         ipv6_address: 2001:200:0:1cdc:1e60::2310:3
 
+
+  internet-router:
+    build:
+      dockerfile: netshoot-internet-router
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      tunnel-2210:
+        ipv6_address: 2001:200:0:1cdc:1e60::2210:4
+      tunnel-2220:
+        ipv6_address: 2001:200:0:1cdc:1e60::2220:4
+      tunnel-2310:
+        ipv6_address: 2001:200:0:1cdc:1e60::2310:4
+    
   ping-container-general-mobile:
     build:
       dockerfile: netshoot-clients

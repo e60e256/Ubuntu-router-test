@@ -28,8 +28,12 @@ ip link set eth0 netns NS
 # Assign eth0 to br0
 ip netns exec NS ip link set eth0 master br0
 
-ip6tables -A FORWARD -i veth0 -j DROP
-ip netns exec NS ip6tables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1340
+#ip6tables -A FORWARD -i veth0 -j DROP
+#p netns exec NS ip6tables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1340
+
+ip netns exec NS ip link set NS-veth1 promisc on
+ip netns exec NS ip link set eth0 promisc on
+ip netns exec NS ip link set dev br0 type bridge forward_delay 0
 
 # Bring up the veth interfaces
 ip netns exec NS ip link set eth0 up

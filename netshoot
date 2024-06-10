@@ -1,0 +1,2 @@
+FROM ubuntu:22.04
+RUN apt update && apt install -y tcpdump traceroute iproute2 mtr iputils-ping net-tools iptables netcat
